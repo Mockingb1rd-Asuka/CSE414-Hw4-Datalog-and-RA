@@ -1,0 +1,4 @@
+.decl q3(o:OfficeType)
+q3(o) :- Employee(m,_,o), Manager(e,m), Employee(e,"Alice",_).
+
+.output q3(IO=stdout)

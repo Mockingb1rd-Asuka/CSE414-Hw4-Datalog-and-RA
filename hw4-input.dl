@@ -1,0 +1,69 @@
+/*** Homework 4 - example Souffle code  ***/
+
+/************ Data model **************/
+
+.symbol_type EidType
+.symbol_type MidType
+.symbol_type NameType
+.symbol_type OfficeType
+
+
+/************ Relation declarations **************/
+
+.decl Employee(eid:EidType, name:NameType, office:OfficeType)
+.decl Manager(eid:EidType, mid:EidType)
+
+
+/************ Data imports: Souffle facts are tab-separated as    *****/
+/************ shown in the exampl.    *****/
+
+.input Employee(filename="DATA/Employee.facts")
+.input Manager(filename="DATA/Manager.facts")
+
+
+
+
+/************ (Optional) Print relations to screen  **************/
+
+
+.output Employee(IO=stdout)
+.output Manager(IO=stdout)
+
+
+/************* Question 0 (example) **************/
+
+/** Print only the names of all employees  **/
+
+.decl q0(n:NameType)
+
+q0(n) :- Employee(_, n, _).
+
+.output q0(IO=stdout)
+/* If you want to print the results to a file, uncomment the following code: */
+/* .output q0(filename="q0.out") */
+
+.decl q1(e:EidType, n:NameType) 
+q1(e,n) :- Employee(e,n,_), Manager(e,m1), Manager(e,m2), m1 != m2.
+
+.output q1(IO=stdout)
+
+.decl q2(e:EidType, n:NameType)
+q2(e,n) :- Employee(e,n,_), !Manager(e,_).
+
+.output q2(IO=stdout)
+
+.decl q3(o:OfficeType)
+q3(o) :- Employee(m,_,o), Manager(e,m), Employee(e,"Alice",_).
+
+.output q3(IO=stdout)
+
+.decl  q4(e:EidType, n:NameType)
+q4(e,n) :- Employee(e,n,_), Manager(e2,e), Employee(e2,_,_),Manager(_,e2).
+
+.output q4(IO=stdout)
+
+.decl qextra(e:EidType, n:NameType)
+qextra(e,n) :- Employee(e,n,_), Manager(e,alice), Employee(alice,"Alice",_).
+qextra(e,n) :- Employee(e,n,_), Manager(e,e2), qextra(e2,n).
+
+.output qextra(IO=stdout)
